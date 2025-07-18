@@ -67,9 +67,9 @@
     <!-- Landing Page View -->
     <div id="landingPage">
         <header class="bg-white/10 backdrop-blur-md shadow-lg sticky top-0 z-50">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="font-game text-xl text-white">Books4Teen</div>
-                <button class="enter-library-btn bg-pink-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-pink-700 transition">
+            <div class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+                <div class="font-game text-lg sm:text-xl text-white">Books4Teen</div>
+                <button class="enter-library-btn bg-pink-600 text-white font-semibold py-2 px-4 sm:px-5 rounded-lg shadow-md hover:bg-pink-700 transition text-sm sm:text-base">
                     Enter Library
                 </button>
             </div>
@@ -77,11 +77,11 @@
 
         <section id="hero" class="text-white py-20 md:py-32">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="font-game text-3xl md:text-5xl leading-tight mb-4">Level Up Your Reading.</h1>
-                <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                <h1 class="font-game text-3xl sm:text-4xl md:text-5xl leading-tight mb-4">Level Up Your Reading.</h1>
+                <p class="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
                     Turn reading into an adventure. Track your progress, earn XP, and unlock achievements. Your epic reading quest starts now.
                 </p>
-                <button class="enter-library-btn bg-purple-600 text-white font-bold py-4 px-8 rounded-lg shadow-xl hover:bg-purple-700 transition-transform transform hover:scale-105 text-lg">
+                <button class="enter-library-btn bg-purple-600 text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-lg shadow-xl hover:bg-purple-700 transition-transform transform hover:scale-105 text-base sm:text-lg">
                     Start Your Quest
                 </button>
             </div>
@@ -99,21 +99,21 @@
         <nav class="bg-black/30 backdrop-blur-md shadow-lg sticky top-0 z-20">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <button id="homeBtn" class="font-game text-lg text-white">Books4Teen</button>
+                    <button id="homeBtn" class="font-game text-base sm:text-lg text-white">Books4Teen</button>
                     <div id="userStats" class="text-right">
-                        <div class="flex items-center gap-4">
-                            <div class="text-center">
+                        <div class="flex items-center gap-2 sm:gap-4">
+                            <div class="text-center text-xs sm:text-base">
                                 <div class="font-bold text-yellow-400">Streak</div>
                                 <div id="streakCount">0 Days</div>
                             </div>
-                            <div class="text-center">
+                            <div class="text-center text-xs sm:text-base">
                                 <div class="font-bold text-green-400">Level <span id="userLevel">1</span></div>
-                                <div class="w-24 bg-gray-600 rounded-full h-2.5">
+                                <div class="w-16 sm:w-24 bg-gray-600 rounded-full h-2.5">
                                     <div id="xpBar" class="bg-green-400 h-2.5 rounded-full" style="width: 0%"></div>
                                 </div>
                             </div>
                             <button id="achievementsBtn" class="p-2 bg-yellow-500 rounded-full hover:bg-yellow-600">
-                                <i class="ph-trophy-fill text-white text-2xl"></i>
+                                <i class="ph-trophy-fill text-white text-xl sm:text-2xl"></i>
                             </button>
                         </div>
                     </div>
@@ -122,25 +122,38 @@
         </nav>
 
         <div class="container mx-auto px-4 py-8">
-            <div class="bg-black/20 backdrop-blur-md p-6 rounded-xl shadow-lg mb-8 max-w-2xl mx-auto">
-                <h2 class="font-game text-xl text-white mb-4 text-center">AI Librarian</h2>
-                <div class="flex gap-2">
+            <div class="bg-black/20 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg mb-8 max-w-2xl mx-auto">
+                <h2 class="font-game text-lg sm:text-xl text-white mb-4 text-center">AI Librarian</h2>
+                <div class="flex flex-col sm:flex-row gap-2">
                     <input type="text" id="aiPrompt" class="w-full px-4 py-2 border border-purple-500 bg-gray-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="e.g., 5 sci-fi books...">
-                    <button id="aiAddBtn" class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 transition flex items-center justify-center w-28">
+                    <button id="aiAddBtn" class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 transition flex items-center justify-center sm:w-32">
                         <span id="aiBtnText">Summon</span>
                         <div id="aiLoader" class="loader hidden"></div>
                     </button>
                 </div>
             </div>
-
-            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
-                 <button id="addBookBtn" class="w-full md:w-auto bg-pink-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-pink-700 transition">
+            
+            <div class="flex justify-center mb-8">
+                <button id="addBookBtn" class="w-full md:w-auto bg-pink-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-pink-700 transition">
                     Add Book Manually
                 </button>
-                <div id="filterContainer" class="flex flex-wrap justify-center gap-2"></div>
             </div>
 
-            <div id="bookList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <!-- Book Sections -->
+            <div id="bookSections" class="space-y-12">
+                <div>
+                    <h2 class="font-game text-xl sm:text-2xl text-yellow-400 mb-4 border-b-2 border-yellow-400/30 pb-2">Reading</h2>
+                    <div id="readingList" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 min-h-[120px]"></div>
+                </div>
+                <div>
+                    <h2 class="font-game text-xl sm:text-2xl text-blue-400 mb-4 border-b-2 border-blue-400/30 pb-2">To Read</h2>
+                    <div id="toReadList" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 min-h-[120px]"></div>
+                </div>
+                <div>
+                    <h2 class="font-game text-xl sm:text-2xl text-green-400 mb-4 border-b-2 border-green-400/30 pb-2">Finished</h2>
+                    <div id="finishedList" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 min-h-[120px]"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Modals and Popups -->
@@ -149,7 +162,7 @@
         <div id="confirmationModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50"></div>
         <div id="alertModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50"></div>
         <div id="achievementsModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-40"></div>
-        <div id="achievementToast" class="achievement-toast fixed bottom-5 left-1/2 -translate-x-1/2 bg-yellow-500 text-black p-4 rounded-lg shadow-2xl z-50 hidden"></div>
+        <div id="achievementToast" class="achievement-toast fixed bottom-5 left-1/2 -translate-x-1/2 bg-yellow-500 text-black p-4 rounded-lg shadow-2xl z-50 hidden w-11/12 max-w-md text-center"></div>
         
     </div>
 
@@ -176,11 +189,10 @@
 
 
             // --- Library App Logic ---
-            const bookList = document.getElementById('bookList');
             const addBookBtn = document.getElementById('addBookBtn');
             const addBookFormContainer = document.getElementById('addBookFormContainer');
             const bookModal = document.getElementById('bookModal');
-            const filterContainer = document.getElementById('filterContainer');
+            const bookSections = document.getElementById('bookSections');
             const aiPrompt = document.getElementById('aiPrompt');
             const aiAddBtn = document.getElementById('aiAddBtn');
             const aiBtnText = document.getElementById('aiBtnText');
@@ -207,7 +219,6 @@
                 STREAK_3: { id: 'STREAK_3', name: 'On a Roll', description: 'Maintain a 3-day streak.' }
             };
             
-            let currentFilter = 'All';
             let books = [
                 { title: "Dune", author: "Frank Herbert", category: "Sci-Fi", status: "To Read", description: "A landmark of science fiction, set in the distant future amidst a feudal interstellar society.", pdfLink: null },
                 { title: "The Hobbit", author: "J.R.R. Tolkien", category: "Fantasy", status: "Reading", description: "The adventure of Bilbo Baggins, a hobbit who goes on a grand adventure.", pdfLink: null },
@@ -219,52 +230,60 @@
             // --- Main Functions ---
             function renderAll() {
                 renderBooks();
-                renderFilters();
                 updateUserStats();
             }
 
             function renderBooks() {
-                bookList.innerHTML = '';
-                const filteredBooks = books.filter(book => currentFilter === 'All' || book.category === currentFilter);
-                if (filteredBooks.length === 0) {
-                    bookList.innerHTML = `<p class="text-gray-400 col-span-full text-center">No books found. Add some to start your quest!</p>`;
-                    return;
-                }
-                filteredBooks.forEach((book) => {
+                // Get the list containers
+                const readingList = document.getElementById('readingList');
+                const toReadList = document.getElementById('toReadList');
+                const finishedList = document.getElementById('finishedList');
+
+                // Clear all lists
+                readingList.innerHTML = '';
+                toReadList.innerHTML = '';
+                finishedList.innerHTML = '';
+
+                // Filter books by status
+                const readingBooks = books.filter(book => book.status === 'Reading');
+                const toReadBooks = books.filter(book => book.status === 'To Read');
+                const finishedBooks = books.filter(book => book.status === 'Finished');
+
+                // Helper function to create a book card element
+                const createBookCard = (book) => {
                     const card = document.createElement('div');
                     const gradient = cardColors[books.indexOf(book) % cardColors.length];
                     const isFinished = book.status === 'Finished';
                     card.className = `book-card relative bg-gradient-to-br ${gradient} rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 ${isFinished ? 'opacity-50' : ''}`;
                     
                     card.innerHTML = `
-                        <div class="p-4 text-white cursor-pointer" data-book-title="${book.title}">
-                            <h3 class="text-md font-bold truncate">${book.title}</h3>
-                            <p class="text-sm text-gray-300 truncate">${book.author}</p>
-                            ${isFinished ? '<div class="absolute top-2 right-2 text-yellow-400"><i class="ph-check-circle-fill text-2xl"></i></div>' : ''}
+                        <div class="p-3 sm:p-4 text-white cursor-pointer h-full flex flex-col justify-between" data-book-title="${book.title}">
+                            <div>
+                                <h3 class="text-sm sm:text-md font-bold truncate">${book.title}</h3>
+                                <p class="text-xs sm:text-sm text-gray-300 truncate">${book.author}</p>
+                            </div>
+                            ${isFinished ? '<div class="absolute top-2 right-2 text-yellow-400"><i class="ph-check-circle-fill text-xl sm:text-2xl"></i></div>' : ''}
                         </div>
                     `;
-                    bookList.appendChild(card);
-                });
-            }
+                    return card;
+                };
 
-            function renderFilters() {
-                const categories = ['All', ...new Set(books.map(book => book.category))];
-                filterContainer.innerHTML = '';
-                categories.forEach(category => {
-                    const button = document.createElement('button');
-                    button.className = `filter-btn text-white font-medium py-1 px-3 rounded-full text-sm transition border-2 border-transparent`;
-                    if (category === currentFilter) {
-                        button.classList.add('active', 'bg-pink-600');
+                // Helper function to render a list or a placeholder message
+                const renderList = (container, bookList, message) => {
+                    if (bookList.length === 0) {
+                        container.innerHTML = `<p class="text-gray-400 col-span-full text-center p-8 text-sm sm:text-base">${message}</p>`;
                     } else {
-                         button.classList.add('bg-black/30', 'hover:border-pink-500');
+                        bookList.forEach(book => {
+                            const card = createBookCard(book);
+                            container.appendChild(card);
+                        });
                     }
-                    button.textContent = category;
-                    button.addEventListener('click', () => {
-                        currentFilter = category;
-                        renderAll();
-                    });
-                    filterContainer.appendChild(button);
-                });
+                };
+                
+                // Render each section
+                renderList(readingList, readingBooks, "You are not currently reading any books.");
+                renderList(toReadList, toReadBooks, "Your 'to read' list is empty. Add a book!");
+                renderList(finishedList, finishedBooks, "You haven't finished any books yet.");
             }
 
             function openModal(title) {
@@ -272,25 +291,25 @@
                 if (!book) return;
                 bookModal.classList.remove('hidden');
                 bookModal.innerHTML = `
-                    <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 relative transform scale-95 transition-transform duration-300" id="modalContent">
+                    <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4 p-6 relative transform scale-95 transition-transform duration-300" id="modalContent">
                         <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">&times;</button>
-                        <h2 class="text-2xl font-bold mb-1">${book.title}</h2>
-                        <p class="text-lg text-gray-400 mb-3">${book.author}</p>
+                        <h2 class="text-xl sm:text-2xl font-bold mb-1">${book.title}</h2>
+                        <p class="text-base sm:text-lg text-gray-400 mb-3">${book.author}</p>
                         <p class="text-sm text-white bg-pink-600 inline-block px-3 py-1 rounded-full mb-4">${book.category}</p>
-                        <p class="text-gray-300 mb-6">${book.description || "No description provided."}</p>
+                        <p class="text-gray-300 mb-6 text-sm sm:text-base">${book.description || "No description provided."}</p>
                         
                         <div class="mb-6">
                             <label class="block text-sm font-bold mb-2 text-gray-400">Status</label>
-                            <div class="flex gap-2" id="statusSelector">
+                            <div class="flex flex-col sm:flex-row gap-2" id="statusSelector">
                                 <button data-status="To Read" class="status-btn flex-1 py-2 rounded-lg ${book.status === 'To Read' ? 'bg-blue-600' : 'bg-gray-700'}">To Read</button>
                                 <button data-status="Reading" class="status-btn flex-1 py-2 rounded-lg ${book.status === 'Reading' ? 'bg-yellow-600' : 'bg-gray-700'}">Reading</button>
                                 <button data-status="Finished" class="status-btn flex-1 py-2 rounded-lg ${book.status === 'Finished' ? 'bg-green-600' : 'bg-gray-700'}">Finished</button>
                             </div>
                         </div>
 
-                        <div class="flex justify-between items-center">
-                            <a id="modalPdfLink" href="${book.pdfLink || '#'}" target="_blank" rel="noopener noreferrer" class="bg-green-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-green-700 transition ${!book.pdfLink ? 'hidden' : ''}">Read Now</a>
-                            <button id="modalDeleteBtn" class="bg-red-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-red-700 transition">Delete</button>
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <a id="modalPdfLink" href="${book.pdfLink || '#'}" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto text-center bg-green-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-green-700 transition ${!book.pdfLink ? 'hidden' : ''}">Read Now</a>
+                            <button id="modalDeleteBtn" class="w-full sm:w-auto bg-red-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-red-700 transition">Delete</button>
                         </div>
                     </div>
                 `;
@@ -347,7 +366,7 @@
                             const xpEl = document.createElement('div');
                             xpEl.className = 'xp-gain font-game text-green-400 text-lg';
                             xpEl.textContent = '+50 XP';
-                            bookCard.appendChild(xpEl);
+                            bookCard.parentElement.appendChild(xpEl);
                         }
                     }
                     
@@ -428,7 +447,7 @@
 
             function showAchievements() {
                 achievementsModal.classList.remove('hidden');
-                let achievementsHTML = `<div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+                achievementsModal.innerHTML = `<div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4 p-6 relative overflow-y-auto max-h-[90vh]">
                     <button id="closeAchievementsBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">&times;</button>
                     <h2 class="font-game text-xl text-center mb-6">Achievements</h2>
                     <div class="space-y-4">`;
@@ -436,20 +455,19 @@
                 for (const key in achievementsList) {
                     const ach = achievementsList[key];
                     const isUnlocked = user.achievements.includes(ach.id);
-                    achievementsHTML += `
+                    achievementsModal.innerHTML += `
                         <div class="flex items-center gap-4 p-3 rounded-lg ${isUnlocked ? 'bg-yellow-500/20' : 'bg-black/20'}">
                             <div class="text-3xl ${isUnlocked ? 'text-yellow-400' : 'text-gray-600'}">
                                 <i class="ph-${isUnlocked ? 'trophy-fill' : 'trophy'}"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold ${isUnlocked ? 'text-white' : 'text-gray-500'}">${ach.name}</h3>
-                                <p class="text-sm ${isUnlocked ? 'text-gray-300' : 'text-gray-600'}">${ach.description}</p>
+                                <h3 class="font-bold text-sm sm:text-base ${isUnlocked ? 'text-white' : 'text-gray-500'}">${ach.name}</h3>
+                                <p class="text-xs sm:text-sm ${isUnlocked ? 'text-gray-300' : 'text-gray-600'}">${ach.description}</p>
                             </div>
                         </div>
                     `;
                 }
-                achievementsHTML += `</div></div>`;
-                achievementsModal.innerHTML = achievementsHTML;
+                achievementsModal.innerHTML += `</div></div>`;
                 document.getElementById('closeAchievementsBtn').addEventListener('click', () => achievementsModal.classList.add('hidden'));
             }
             
@@ -459,7 +477,7 @@
             function showAddForm() {
                 addBookFormContainer.classList.remove('hidden');
                 addBookFormContainer.innerHTML = `
-                    <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 overflow-y-auto max-h-full">
+                    <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4 p-6 overflow-y-auto max-h-[90vh]">
                         <h2 class="text-2xl font-bold mb-6 text-center text-white">Add a New Book</h2>
                         <form id="addBookForm">
                             <div class="mb-4"><label for="title" class="block text-sm font-medium mb-1">Title</label><input type="text" id="title" name="title" class="w-full p-2 bg-gray-700 rounded" required></div>
@@ -467,7 +485,7 @@
                             <div class="mb-4"><label for="category" class="block text-sm font-medium mb-1">Category</label><input list="category-list" id="category" name="category" class="w-full p-2 bg-gray-700 rounded" required><datalist id="category-list"></datalist></div>
                             <div class="mb-4"><label for="pdfLink" class="block text-sm font-medium mb-1">Link (Optional)</label><input type="url" id="pdfLink" name="pdfLink" class="w-full p-2 bg-gray-700 rounded"></div>
                             <div class="mb-6"><label for="description" class="block text-sm font-medium mb-1">Description (Optional)</label><textarea id="description" name="description" rows="3" class="w-full p-2 bg-gray-700 rounded"></textarea></div>
-                            <div class="flex justify-end gap-4">
+                            <div class="flex flex-col sm:flex-row justify-end gap-4">
                                 <button type="button" id="cancelAddBtn" class="bg-gray-600 py-2 px-5 rounded">Cancel</button>
                                 <button type="submit" class="bg-pink-600 py-2 px-5 rounded">Add Book</button>
                             </div>
@@ -528,7 +546,7 @@
 
             // --- Event Listeners ---
             addBookBtn.addEventListener('click', showAddForm);
-            bookList.addEventListener('click', (e) => {
+            bookSections.addEventListener('click', (e) => {
                 const cardBody = e.target.closest('[data-book-title]');
                 if (cardBody) openModal(cardBody.dataset.bookTitle);
             });
