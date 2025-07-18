@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books4Teen - Level Up Your Reading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <style>
+        :root {
+            --bg-color: #1a1a2e;
+            --primary: #e94560;
+            --secondary: #0f3460;
+            --accent: #16213e;
+            --text-color: #f0f0f0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .font-game {
+            font-family: 'Press Start 2P', cursive;
+        }
+        #libraryApp {
+            background: var(--bg-color);
+            min-height: 100vh;
+        }
+        .achievement-toast {
+            animation: slide-in-out 4s ease-in-out forwards;
+        }
+        @keyframes slide-in-out {
+            0% { transform: translateY(100%); opacity: 0; }
+            15% { transform: translateY(0); opacity: 1; }
+            85% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .xp-gain {
+            animation: fade-up-out 1.5s ease-out forwards;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            pointer-events: none;
+        }
+        @keyframes fade-up-out {
+            0% { transform: translate(-50%, 0); opacity: 1; }
+            100% { transform: translate(-50%, -50px); opacity: 0; }
+        }
+        /* Simple loader for the AI button */
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Landing Page View -->
+    <div id="landingPage">
+        <header class="bg-white/10 backdrop-blur-md shadow-lg sticky top-0 z-50">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="font-game text-xl text-white">Books4Teen</div>
+                <button class="enter-library-btn bg-pink-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-pink-700 transition">
+                    Enter Library
+                </button>
+            </div>
+        </header>
+
+        <section id="hero" class="text-white py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="font-game text-3xl md:text-5xl leading-tight mb-4">Level Up Your Reading.</h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Turn reading into an adventure. Track your progress, earn XP, and unlock achievements. Your epic reading quest starts now.
+                </p>
+                <button class="enter-library-btn bg-purple-600 text-white font-bold py-4 px-8 rounded-lg shadow-xl hover:bg-purple-700 transition-transform transform hover:scale-105 text-lg">
+                    Start Your Quest
+                </button>
+            </div>
+        </section>
+
+        <footer class="bg-black/20 text-white py-6">
+            <div class="container mx-auto px-6 text-center">
+                <p>&copy; 2025 Books4Teen. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Main Library App View (Initially Hidden) -->
+    <div id="libraryApp" class="hidden">
+        <nav class="bg-black/30 backdrop-blur-md shadow-lg sticky top-0 z-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <button id="homeBtn" class="font-game text-lg text-white">Books4Teen</button>
+                    <div id="userStats" class="text-right">
+                        <div class="flex items-center gap-4">
+                            <div class="text-center">
+                                <div class="font-bold text-yellow-400">Streak</div>
+                                <div id="streakCount">0 Days</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="font-bold text-green-400">Level <span id="userLevel">1</span></div>
+                                <div class="w-24 bg-gray-600 rounded-full h-2.5">
+                                    <div id="xpBar" class="bg-green-400 h-2.5 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <button id="achievementsBtn" class="p-2 bg-yellow-500 rounded-full hover:bg-yellow-600">
+                                <i class="ph-trophy-fill text-white text-2xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mx-auto px-4 py-8">
+            <div class="bg-black/20 backdrop-blur-md p-6 rounded-xl shadow-lg mb-8 max-w-2xl mx-auto">
+                <h2 class="font-game text-xl text-white mb-4 text-center">AI Librarian</h2>
+                <div class="flex gap-2">
+                    <input type="text" id="aiPrompt" class="w-full px-4 py-2 border border-purple-500 bg-gray-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="e.g., 5 sci-fi books...">
+                    <button id="aiAddBtn" class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 transition flex items-center justify-center w-28">
+                        <span id="aiBtnText">Summon</span>
+                        <div id="aiLoader" class="loader hidden"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+                 <button id="addBookBtn" class="w-full md:w-auto bg-pink-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-pink-700 transition">
+                    Add Book Manually
+                </button>
+                <div id="filterContainer" class="flex flex-wrap justify-center gap-2"></div>
+            </div>
+
+            <div id="bookList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        </div>
+
+        <!-- Modals and Popups -->
+        <div id="bookModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-30"></div>
+        <div id="addBookFormContainer" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-30"></div>
+        <div id="confirmationModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50"></div>
+        <div id="alertModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50"></div>
+        <div id="achievementsModal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-40"></div>
+        <div id="achievementToast" class="achievement-toast fixed bottom-5 left-1/2 -translate-x-1/2 bg-yellow-500 text-black p-4 rounded-lg shadow-2xl z-50 hidden"></div>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- View Switching ---
+            const landingPage = document.getElementById('landingPage');
+            const libraryApp = document.getElementById('libraryApp');
+            const enterLibraryBtns = document.querySelectorAll('.enter-library-btn');
+            const homeBtn = document.getElementById('homeBtn');
+
+            function showLibrary() {
+                landingPage.classList.add('hidden');
+                libraryApp.classList.remove('hidden');
+            }
+
+            function showLandingPage() {
+                libraryApp.classList.add('hidden');
+                landingPage.classList.remove('hidden');
+            }
+
+            enterLibraryBtns.forEach(btn => btn.addEventListener('click', showLibrary));
+            homeBtn.addEventListener('click', showLandingPage);
+
+
+            // --- Library App Logic ---
+            const bookList = document.getElementById('bookList');
+            const addBookBtn = document.getElementById('addBookBtn');
+            const addBookFormContainer = document.getElementById('addBookFormContainer');
+            const bookModal = document.getElementById('bookModal');
+            const filterContainer = document.getElementById('filterContainer');
+            const aiPrompt = document.getElementById('aiPrompt');
+            const aiAddBtn = document.getElementById('aiAddBtn');
+            const aiBtnText = document.getElementById('aiBtnText');
+            const aiLoader = document.getElementById('aiLoader');
+            const confirmationModal = document.getElementById('confirmationModal');
+            const achievementsModal = document.getElementById('achievementsModal');
+            const achievementsBtn = document.getElementById('achievementsBtn');
+            const achievementToast = document.getElementById('achievementToast');
+
+            // --- Game State ---
+            let user = {
+                level: 1,
+                xp: 0,
+                streak: 0,
+                lastLogin: null,
+                achievements: []
+            };
+
+            const achievementsList = {
+                FIRST_BOOK: { id: 'FIRST_BOOK', name: 'First Chapter', description: 'Add your first book.' },
+                TEN_BOOKS: { id: 'TEN_BOOKS', name: 'Bookworm', description: 'Have 10 books in your library.' },
+                FIRST_FINISH: { id: 'FIRST_FINISH', name: 'Page Turner', description: 'Finish your first book.' },
+                GENRE_EXPLORER: { id: 'GENRE_EXPLORER', name: 'Genre Explorer', description: 'Have books from 5 different categories.' },
+                STREAK_3: { id: 'STREAK_3', name: 'On a Roll', description: 'Maintain a 3-day streak.' }
+            };
+            
+            let currentFilter = 'All';
+            let books = [
+                { title: "Dune", author: "Frank Herbert", category: "Sci-Fi", status: "To Read", description: "A landmark of science fiction, set in the distant future amidst a feudal interstellar society.", pdfLink: null },
+                { title: "The Hobbit", author: "J.R.R. Tolkien", category: "Fantasy", status: "Reading", description: "The adventure of Bilbo Baggins, a hobbit who goes on a grand adventure.", pdfLink: null },
+                { title: "Educated", author: "Tara Westover", category: "Memoir", status: "Finished", description: "A memoir about a young girl who, kept out of school, leaves her survivalist family and goes on to earn a PhD from Cambridge University.", pdfLink: null }
+            ];
+            
+            const cardColors = ['from-purple-500 to-indigo-500', 'from-pink-500 to-red-500', 'from-green-400 to-teal-400', 'from-yellow-400 to-orange-400'];
+
+            // --- Main Functions ---
+            function renderAll() {
+                renderBooks();
+                renderFilters();
+                updateUserStats();
+            }
+
+            function renderBooks() {
+                bookList.innerHTML = '';
+                const filteredBooks = books.filter(book => currentFilter === 'All' || book.category === currentFilter);
+                if (filteredBooks.length === 0) {
+                    bookList.innerHTML = `<p class="text-gray-400 col-span-full text-center">No books found. Add some to start your quest!</p>`;
+                    return;
+                }
+                filteredBooks.forEach((book) => {
+                    const card = document.createElement('div');
+                    const gradient = cardColors[books.indexOf(book) % cardColors.length];
+                    const isFinished = book.status === 'Finished';
+                    card.className = `book-card relative bg-gradient-to-br ${gradient} rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 ${isFinished ? 'opacity-50' : ''}`;
+                    
+                    card.innerHTML = `
+                        <div class="p-4 text-white cursor-pointer" data-book-title="${book.title}">
+                            <h3 class="text-md font-bold truncate">${book.title}</h3>
+                            <p class="text-sm text-gray-300 truncate">${book.author}</p>
+                            ${isFinished ? '<div class="absolute top-2 right-2 text-yellow-400"><i class="ph-check-circle-fill text-2xl"></i></div>' : ''}
+                        </div>
+                    `;
+                    bookList.appendChild(card);
+                });
+            }
+
+            function renderFilters() {
+                const categories = ['All', ...new Set(books.map(book => book.category))];
+                filterContainer.innerHTML = '';
+                categories.forEach(category => {
+                    const button = document.createElement('button');
+                    button.className = `filter-btn text-white font-medium py-1 px-3 rounded-full text-sm transition border-2 border-transparent`;
+                    if (category === currentFilter) {
+                        button.classList.add('active', 'bg-pink-600');
+                    } else {
+                         button.classList.add('bg-black/30', 'hover:border-pink-500');
+                    }
+                    button.textContent = category;
+                    button.addEventListener('click', () => {
+                        currentFilter = category;
+                        renderAll();
+                    });
+                    filterContainer.appendChild(button);
+                });
+            }
+
+            function openModal(title) {
+                const book = books.find(b => b.title === title);
+                if (!book) return;
+                bookModal.classList.remove('hidden');
+                bookModal.innerHTML = `
+                    <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 relative transform scale-95 transition-transform duration-300" id="modalContent">
+                        <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">&times;</button>
+                        <h2 class="text-2xl font-bold mb-1">${book.title}</h2>
+                        <p class="text-lg text-gray-400 mb-3">${book.author}</p>
+                        <p class="text-sm text-white bg-pink-600 inline-block px-3 py-1 rounded-full mb-4">${book.category}</p>
+                        <p class="text-gray-300 mb-6">${book.description || "No description provided."}</p>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold mb-2 text-gray-400">Status</label>
+                            <div class="flex gap-2" id="statusSelector">
+                                <button data-status="To Read" class="status-btn flex-1 py-2 rounded-lg ${book.status === 'To Read' ? 'bg-blue-600' : 'bg-gray-700'}">To Read</button>
+                                <button data-status="Reading" class="status-btn flex-1 py-2 rounded-lg ${book.status === 'Reading' ? 'bg-yellow-600' : 'bg-gray-700'}">Reading</button>
+                                <button data-status="Finished" class="status-btn flex-1 py-2 rounded-lg ${book.status === 'Finished' ? 'bg-green-600' : 'bg-gray-700'}">Finished</button>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center">
+                            <a id="modalPdfLink" href="${book.pdfLink || '#'}" target="_blank" rel="noopener noreferrer" class="bg-green-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-green-700 transition ${!book.pdfLink ? 'hidden' : ''}">Read Now</a>
+                            <button id="modalDeleteBtn" class="bg-red-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-red-700 transition">Delete</button>
+                        </div>
+                    </div>
+                `;
+                setTimeout(() => document.getElementById('modalContent').classList.remove('scale-95'), 10);
+
+                document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+                document.getElementById('modalDeleteBtn').addEventListener('click', () => promptForDelete(book.title));
+                document.querySelectorAll('.status-btn').forEach(btn => {
+                    btn.addEventListener('click', () => updateBookStatus(book.title, btn.dataset.status));
+                });
+            }
+
+            function closeModal() {
+                const modalContent = document.getElementById('modalContent');
+                if (modalContent) {
+                    modalContent.classList.add('scale-95');
+                    setTimeout(() => bookModal.classList.add('hidden'), 300);
+                }
+            }
+            
+            function handleAddBook(e) {
+                e.preventDefault();
+                const title = e.target.title.value.trim();
+                const author = e.target.author.value.trim();
+                const category = e.target.category.value.trim();
+                const description = e.target.description.value.trim();
+                const pdfLink = e.target.pdfLink.value.trim();
+
+                if (title && author && category) {
+                    const newBook = { title, author, category, description, pdfLink, status: 'To Read' };
+                    books.push(newBook);
+                    
+                    addXP(10); // +10 XP for adding a book
+                    checkAchievement('FIRST_BOOK');
+                    checkAchievement('TEN_BOOKS');
+                    checkAchievement('GENRE_EXPLORER');
+                    
+                    renderAll();
+                    hideAddForm();
+                }
+            }
+
+            function updateBookStatus(title, newStatus) {
+                const book = books.find(b => b.title === title);
+                if (book && book.status !== newStatus) {
+                    const oldStatus = book.status;
+                    book.status = newStatus;
+                    
+                    if (newStatus === 'Finished' && oldStatus !== 'Finished') {
+                        addXP(50); // +50 XP for finishing a book
+                        checkAchievement('FIRST_FINISH');
+                        const bookCard = document.querySelector(`[data-book-title="${title}"]`);
+                        if (bookCard) {
+                            const xpEl = document.createElement('div');
+                            xpEl.className = 'xp-gain font-game text-green-400 text-lg';
+                            xpEl.textContent = '+50 XP';
+                            bookCard.appendChild(xpEl);
+                        }
+                    }
+                    
+                    closeModal();
+                    renderAll();
+                }
+            }
+
+            // --- Gamification ---
+
+            function addXP(amount) {
+                user.xp += amount;
+                const xpForNextLevel = 100 * user.level;
+                if (user.xp >= xpForNextLevel) {
+                    user.level++;
+                    user.xp -= xpForNextLevel;
+                    // Level up toast
+                    showToast(`Level Up! You are now Level ${user.level}!`, 'level-up');
+                }
+                updateUserStats();
+            }
+
+            function updateUserStats() {
+                document.getElementById('userLevel').textContent = user.level;
+                const xpForNextLevel = 100 * user.level;
+                const xpPercentage = (user.xp / xpForNextLevel) * 100;
+                document.getElementById('xpBar').style.width = `${xpPercentage}%`;
+                
+                // Streak logic
+                const today = new Date().toDateString();
+                if (user.lastLogin !== today) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    if (user.lastLogin === yesterday.toDateString()) {
+                        user.streak++;
+                    } else {
+                        user.streak = 1; // Start new streak
+                    }
+                    user.lastLogin = today;
+                    checkAchievement('STREAK_3');
+                }
+                document.getElementById('streakCount').textContent = `${user.streak} Day${user.streak === 1 ? '' : 's'}`;
+            }
+
+            function checkAchievement(id) {
+                if (user.achievements.includes(id)) return;
+
+                let unlocked = false;
+                switch(id) {
+                    case 'FIRST_BOOK':
+                        if (books.length >= 1) unlocked = true;
+                        break;
+                    case 'TEN_BOOKS':
+                        if (books.length >= 10) unlocked = true;
+                        break;
+                    case 'FIRST_FINISH':
+                        if (books.some(b => b.status === 'Finished')) unlocked = true;
+                        break;
+                    case 'GENRE_EXPLORER':
+                        if (new Set(books.map(b => b.category)).size >= 5) unlocked = true;
+                        break;
+                    case 'STREAK_3':
+                        if (user.streak >= 3) unlocked = true;
+                        break;
+                }
+
+                if (unlocked) {
+                    user.achievements.push(id);
+                    showToast(`Achievement Unlocked: ${achievementsList[id].name}`);
+                }
+            }
+
+            function showToast(message) {
+                achievementToast.textContent = message;
+                achievementToast.classList.remove('hidden');
+                setTimeout(() => achievementToast.classList.add('hidden'), 3900);
+            }
+
+            function showAchievements() {
+                achievementsModal.classList.remove('hidden');
+                let achievementsHTML = `<div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+                    <button id="closeAchievementsBtn" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">&times;</button>
+                    <h2 class="font-game text-xl text-center mb-6">Achievements</h2>
+                    <div class="space-y-4">`;
+                
+                for (const key in achievementsList) {
+                    const ach = achievementsList[key];
+                    const isUnlocked = user.achievements.includes(ach.id);
+                    achievementsHTML += `
+                        <div class="flex items-center gap-4 p-3 rounded-lg ${isUnlocked ? 'bg-yellow-500/20' : 'bg-black/20'}">
+                            <div class="text-3xl ${isUnlocked ? 'text-yellow-400' : 'text-gray-600'}">
+                                <i class="ph-${isUnlocked ? 'trophy-fill' : 'trophy'}"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold ${isUnlocked ? 'text-white' : 'text-gray-500'}">${ach.name}</h3>
+                                <p class="text-sm ${isUnlocked ? 'text-gray-300' : 'text-gray-600'}">${ach.description}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                achievementsHTML += `</div></div>`;
+                achievementsModal.innerHTML = achievementsHTML;
+                document.getElementById('closeAchievementsBtn').addEventListener('click', () => achievementsModal.classList.add('hidden'));
+            }
+            
+            achievementsBtn.addEventListener('click', showAchievements);
+
+            // --- Helper Functions for Modals ---
+            function showAddForm() {
+                addBookFormContainer.classList.remove('hidden');
+                addBookFormContainer.innerHTML = `
+                    <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 overflow-y-auto max-h-full">
+                        <h2 class="text-2xl font-bold mb-6 text-center text-white">Add a New Book</h2>
+                        <form id="addBookForm">
+                            <div class="mb-4"><label for="title" class="block text-sm font-medium mb-1">Title</label><input type="text" id="title" name="title" class="w-full p-2 bg-gray-700 rounded" required></div>
+                            <div class="mb-4"><label for="author" class="block text-sm font-medium mb-1">Author</label><input type="text" id="author" name="author" class="w-full p-2 bg-gray-700 rounded" required></div>
+                            <div class="mb-4"><label for="category" class="block text-sm font-medium mb-1">Category</label><input list="category-list" id="category" name="category" class="w-full p-2 bg-gray-700 rounded" required><datalist id="category-list"></datalist></div>
+                            <div class="mb-4"><label for="pdfLink" class="block text-sm font-medium mb-1">Link (Optional)</label><input type="url" id="pdfLink" name="pdfLink" class="w-full p-2 bg-gray-700 rounded"></div>
+                            <div class="mb-6"><label for="description" class="block text-sm font-medium mb-1">Description (Optional)</label><textarea id="description" name="description" rows="3" class="w-full p-2 bg-gray-700 rounded"></textarea></div>
+                            <div class="flex justify-end gap-4">
+                                <button type="button" id="cancelAddBtn" class="bg-gray-600 py-2 px-5 rounded">Cancel</button>
+                                <button type="submit" class="bg-pink-600 py-2 px-5 rounded">Add Book</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+                document.getElementById('addBookForm').addEventListener('submit', handleAddBook);
+                document.getElementById('cancelAddBtn').addEventListener('click', hideAddForm);
+                const categoryList = document.getElementById('category-list');
+                categoryList.innerHTML = '';
+                [...new Set(books.map(b => b.category))].forEach(c => {
+                    categoryList.innerHTML += `<option value="${c}">`;
+                });
+            }
+            
+            function hideAddForm() {
+                addBookFormContainer.classList.add('hidden');
+            }
+            
+            function promptForDelete(title) {
+                confirmationModal.classList.remove('hidden');
+                confirmationModal.innerHTML = `
+                    <div class="bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm mx-auto text-center">
+                        <h3 class="text-lg font-bold text-white mb-4">Are you sure?</h3>
+                        <p class="text-gray-300 mb-6">Do you really want to delete this book? This action cannot be undone.</p>
+                        <div class="flex justify-center gap-4">
+                            <button id="cancelDeleteBtn" class="bg-gray-600 py-2 px-6 rounded">Cancel</button>
+                            <button id="confirmDeleteBtn" class="bg-red-600 py-2 px-6 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('cancelDeleteBtn').addEventListener('click', () => confirmationModal.classList.add('hidden'));
+                document.getElementById('confirmDeleteBtn').addEventListener('click', () => deleteBook(title));
+            }
+
+            function deleteBook(title) {
+                books = books.filter(book => book.title !== title);
+                confirmationModal.classList.add('hidden');
+                closeModal();
+                renderAll();
+            }
+
+            // --- New Alert Modal Function ---
+            function showAlert(title, message) {
+                const alertModal = document.getElementById('alertModal');
+                alertModal.classList.remove('hidden');
+                alertModal.innerHTML = `
+                    <div class="bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm mx-auto text-center">
+                        <h3 class="text-lg font-bold text-white mb-4">${title}</h3>
+                        <p class="text-gray-300 mb-6">${message}</p>
+                        <div class="flex justify-center">
+                            <button id="closeAlertBtn" class="bg-pink-600 py-2 px-6 rounded">OK</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('closeAlertBtn').addEventListener('click', () => alertModal.classList.add('hidden'));
+            }
+
+            // --- Event Listeners ---
+            addBookBtn.addEventListener('click', showAddForm);
+            bookList.addEventListener('click', (e) => {
+                const cardBody = e.target.closest('[data-book-title]');
+                if (cardBody) openModal(cardBody.dataset.bookTitle);
+            });
+            
+            // --- AI Logic ---
+            async function handleAiAdd() {
+                const prompt = aiPrompt.value.trim();
+                if (!prompt) return;
+                aiBtnText.classList.add('hidden');
+                aiLoader.classList.remove('hidden');
+                aiAddBtn.disabled = true;
+
+                try {
+                    const chatHistory = [{ role: "user", parts: [{ text: `Generate a list of books based on the following prompt: "${prompt}". Provide the response as a JSON array of objects, each with "title", "author", "category", and "description" fields.` }] }];
+                    const payload = {
+                        contents: chatHistory,
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        "title": { "type": "STRING" },
+                                        "author": { "type": "STRING" },
+                                        "category": { "type": "STRING" },
+                                        "description": { "type": "STRING" }
+                                    },
+                                    required: ["title", "author", "category", "description"]
+                                }
+                            }
+                        }
+                    };
+                    const apiKey = ""; // API key will be handled by the environment
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const jsonText = result.candidates[0].content.parts[0].text;
+                        const newBooks = JSON.parse(jsonText);
+                        
+                        newBooks.forEach(newBook => {
+                            if (!books.some(book => book.title.toLowerCase() === newBook.title.toLowerCase())) {
+                                books.push({ ...newBook, status: 'To Read', pdfLink: null });
+                                addXP(10);
+                            }
+                        });
+
+                        checkAchievement('FIRST_BOOK');
+                        checkAchievement('TEN_BOOKS');
+                        checkAchievement('GENRE_EXPLORER');
+                        renderAll();
+                        aiPrompt.value = '';
+                    } else {
+                        console.error("Unexpected API response structure:", result);
+                        showAlert("AI Error", "The AI returned an unexpected response. Please try again.");
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching from Gemini API:', error);
+                    showAlert('API Error', 'An error occurred while fetching books from the AI. Please check the console for details.');
+                } finally {
+                    aiBtnText.classList.remove('hidden');
+                    aiLoader.classList.add('hidden');
+                    aiAddBtn.disabled = false;
+                }
+            }
+            aiAddBtn.addEventListener('click', handleAiAdd);
+            aiPrompt.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAiAdd(); });
+
+            // --- Initial Load ---
+            updateUserStats();
+            renderAll();
+        });
+    </script>
+</body>
+</html>
